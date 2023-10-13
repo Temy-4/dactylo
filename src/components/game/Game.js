@@ -25,15 +25,6 @@ export const Game = ({ user = {} }) => {
   const [additionalTime, setAdditionalTime] = useState(0);
   const [gameIsOver, setGameIsOver] = useState(true);
 
-  const start = useCallback(() => {
-    if (levels) {
-      setWords(shuffleArray(levels[user.level][user?.lang || "fr"].words));
-      setInitTime(DEFAULT_TIME);
-      inputTextRef.current.disabled = undefined;
-      inputTextRef.current.focus();
-    }
-  }, [inputTextRef, levels, user]);
-
   useEffect(() => {
     if (user && user.pseudo) {
       getRank(dispatch, user);
@@ -45,7 +36,7 @@ export const Game = ({ user = {} }) => {
   }, [user, dispatch]);
 
   useEffect(() => {
-    if (user && user.level && !gameIsOver) {
+    if (user && user.level) {
       if (!levels) {
         getWords(dispatch);
       } else if (!words) {
@@ -98,6 +89,19 @@ export const Game = ({ user = {} }) => {
     if (inputTextRef.current) inputTextRef.current.focus();
   }, [inputTextRef]);
 
+  const start = useCallback(() => {
+    if (levels) {
+      setGameIsOver(false);
+      setInitTime(DEFAULT_TIME);
+      setPoints(0);
+      setIndex(0);
+      setWords(shuffleArray(levels[user.level][user?.lang || "fr"].words));
+      inputTextRef.current.value = "";
+      inputTextRef.current.disabled = undefined;
+      inputTextRef.current.focus();
+    }
+  }, [levels, user?.lang, user.level]);
+
   return (
     <div
       className=" h-screen w-screen  jakarta flex-col flex"
@@ -110,15 +114,13 @@ export const Game = ({ user = {} }) => {
         <div className="w-12/12 sm:w-8/12 md:w-6/12 lg:w-4/12 xl:w-4/12 bg-white rounded-lg shadow-lg p-5">
           <h2 className="text-center mb-10 text-2xl">Ready to play ? </h2>
           <p className="text-center">
-            Type as many words as you can within {DEFAULT_TIME} seconds. Each
-            word you write will appear immediately after you finish typing it.
+            Type as many words as you can within{" "}
+            <strong>{DEFAULT_TIME} seconds</strong>. Each word you write will
+            appear immediately after you finish typing it.
           </p>
           <div className="px-10 mb-5 ">
             <button
-              onClick={() => {
-                setGameIsOver(false);
-                start();
-              }}
+              onClick={() => (words ? start() : undefined)}
               className="p-2 mt-4 rounded-md w-full  bg-blue-500 hover:bg-blue-600 text-white"
             >
               Start
@@ -163,7 +165,7 @@ export const Game = ({ user = {} }) => {
             </div>
             <div className="w-1/3 flex flex-col justify-center items-center ">
               <span>Remaining Time </span>
-              {!!initTime ? (
+              {!!initTime && !gameIsOver ? (
                 <Timer
                   initialTime={initTime}
                   additionalTime={additionalTime}

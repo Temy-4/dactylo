@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 export const Timer = ({ initialTime, additionalTime, gameOver }) => {
   const [time, setTime] = useState(initialTime);
-
   useEffect(() => {
     if (additionalTime) {
       setTime(time + additionalTime);
@@ -12,6 +11,7 @@ export const Timer = ({ initialTime, additionalTime, gameOver }) => {
 
   useEffect(() => {
     if (initialTime) {
+      // setTime(initialTime);
       const interval = setInterval(() => {
         setTime((prevTime) => {
           if (prevTime > 0) {
