@@ -25,6 +25,45 @@ export const Game = ({ user = {} }) => {
   const [additionalTime, setAdditionalTime] = useState(0);
   const [gameIsOver, setGameIsOver] = useState(true);
 
+  const start = useCallback(() => {
+    if (levels) {
+      setGameIsOver(false);
+      setInitTime(DEFAULT_TIME);
+      setPoints(0);
+      setIndex(0);
+      setWords(shuffleArray(levels[user.level][user?.lang || "fr"].words));
+      inputTextRef.current.value = "";
+      inputTextRef.current.disabled = undefined;
+      inputTextRef.current.focus();
+    }
+  }, [levels, user?.lang, user.level]);
+
+  const checkWord = useCallback(
+    (e) => {
+      const typed = e.target.value;
+      // console.log({ typed, textToWrite });
+      if (typed.length > textToWrite.length) {
+      } else if (typed === textToWrite) {
+        setPoints(points + textToWrite.length);
+        setIndex(index + 1);
+        // setAdditionalTime(Math.round(textToWrite.length / 3)); // TODO sera mieux géré plus tard.
+        inputTextRef.current.value = "";
+      } else {
+      }
+    },
+    [textToWrite, index, points]
+  );
+
+  const gameOver = useCallback(() => {
+    setGameIsOver(true);
+    inputTextRef.current.disabled = "disabled";
+    saveScore(dispatch, { score: points, uid: user.uid, level: user.level });
+  }, [points, dispatch, user]);
+
+  const handleFocus = useCallback(() => {
+    if (inputTextRef.current) inputTextRef.current.focus();
+  }, [inputTextRef]);
+
   useEffect(() => {
     if (user && user.pseudo) {
       getRank(dispatch, user);
@@ -62,45 +101,6 @@ export const Game = ({ user = {} }) => {
       setTextToWrite(words[index]);
     }
   }, [words, textToWrite, index]);
-
-  const checkWord = useCallback(
-    (e) => {
-      const typed = e.target.value;
-      // console.log({ typed, textToWrite });
-      if (typed.length > textToWrite.length) {
-      } else if (typed === textToWrite) {
-        setPoints(points + textToWrite.length);
-        setIndex(index + 1);
-        // setAdditionalTime(Math.round(textToWrite.length / 3)); // TODO sera mieux géré plus tard.
-        inputTextRef.current.value = "";
-      } else {
-      }
-    },
-    [textToWrite, index, points]
-  );
-
-  const gameOver = useCallback(() => {
-    setGameIsOver(true);
-    inputTextRef.current.disabled = "disabled";
-    saveScore(dispatch, { score: points, uid: user.uid, level: user.level });
-  }, [points, dispatch, user]);
-
-  const handleFocus = useCallback(() => {
-    if (inputTextRef.current) inputTextRef.current.focus();
-  }, [inputTextRef]);
-
-  const start = useCallback(() => {
-    if (levels) {
-      setGameIsOver(false);
-      setInitTime(DEFAULT_TIME);
-      setPoints(0);
-      setIndex(0);
-      setWords(shuffleArray(levels[user.level][user?.lang || "fr"].words));
-      inputTextRef.current.value = "";
-      inputTextRef.current.disabled = undefined;
-      inputTextRef.current.focus();
-    }
-  }, [levels, user?.lang, user.level]);
 
   return (
     <div
