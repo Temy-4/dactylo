@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #FFFCF3;
+}
+
+#root {
+  display: flex;
+  align-items: center;
+}
+
+.suranna{
+  font-family: "Suranna";
+}
+.jakarta{
+  font-family: "Plus Jakarta Sans";
+  font-style: normal;
+}
