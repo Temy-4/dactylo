@@ -30,7 +30,24 @@ export const Timer = ({ initialTime, additionalTime, gameOver }) => {
     }
   }, [gameOver, time]);
 
+  const strokeDasharray = `${((time / initialTime) * 283).toFixed(0)} 283`;
   return (
-    <div className="text-7xl text-black/90 font-semibold  mt-10">{time}</div>
+    <div className="flex justify-center items-center">
+      <svg width="100" height="100" className="text-blue-600">
+        <circle
+          stroke="currentColor"
+          strokeWidth="6"
+          strokeDasharray={strokeDasharray}
+          fill="none"
+          r="45"
+          cx="50"
+          cy="50"
+          style={{ transform: "rotate(-90deg)", transformOrigin: "50% 50%" }}
+        ></circle>
+      </svg>
+      <span className="absolute text-3xl text-blue-900  font-semibold">
+        {time}
+      </span>
+    </div>
   );
 };
