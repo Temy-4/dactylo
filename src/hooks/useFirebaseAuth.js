@@ -46,7 +46,10 @@ export default function useFirebaseAuth() {
   const createUserWithEmailAndPassword = (email, password) =>
     firebase.auth().createUserWithEmailAndPassword(email, password);
 
-  const signOut = () => firebase.auth().signOut().then(clear);
+  const signOut = () => {
+    firebase.auth().signOut().then(clear);
+    window.location.reload();
+  };
 
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged(authStateChanged);

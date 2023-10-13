@@ -10,12 +10,17 @@ import {
 } from "@/stores/game.store";
 import { ordinalSuffixOf, shuffleArray } from "@/utils/helper";
 import Modal from "../Modal/Modal";
+import { ScoreIncrement } from "./ScoreIncrementAnimation";
+import { useAuth } from "@/stores/auth.store";
+import Link from "next/link";
+import Image from "next/image";
 
 const DEFAULT_TIME = 60;
 
 export const Game = ({ user = {} }) => {
   const inputTextRef = useRef();
   const dispatch = useGameDispatch();
+  const { signOut } = useAuth();
   const { levels, leaderboard, loading, rank } = useGameState();
   const [words, setWords] = useState();
   const [index, setIndex] = useState(0);
@@ -24,12 +29,13 @@ export const Game = ({ user = {} }) => {
   const [points, setPoints] = useState(0);
   const [additionalTime, setAdditionalTime] = useState(0);
   const [gameIsOver, setGameIsOver] = useState(true);
-
+  const [newPoints, setNewPoints] = useState(0);
   const start = useCallback(() => {
     if (levels) {
       setGameIsOver(false);
       setInitTime(DEFAULT_TIME);
       setPoints(0);
+      setNewPoints(0);
       setIndex(0);
       setWords(shuffleArray(levels[user.level][user?.lang || "fr"].words));
       inputTextRef.current.value = "";
@@ -44,6 +50,7 @@ export const Game = ({ user = {} }) => {
       // console.log({ typed, textToWrite });
       if (typed.length > textToWrite.length) {
       } else if (typed === textToWrite) {
+        setNewPoints(textToWrite.length);
         setPoints(points + textToWrite.length);
         setIndex(index + 1);
         // setAdditionalTime(Math.round(textToWrite.length / 3)); // TODO sera mieux géré plus tard.
@@ -79,7 +86,7 @@ export const Game = ({ user = {} }) => {
       if (!levels) {
         getWords(dispatch);
       } else if (!words) {
-        start();
+        setWords(shuffleArray(levels[user.level][user?.lang || "fr"].words));
       }
     } else {
       inputTextRef.current.disabled = "disabled";
@@ -118,13 +125,29 @@ export const Game = ({ user = {} }) => {
             <strong>{DEFAULT_TIME} seconds</strong>. Each word you write will
             appear immediately after you finish typing it.
           </p>
-          <div className="px-10 mb-5 ">
+          <div className="px-0 mt-4 ">
             <button
               onClick={() => (words ? start() : undefined)}
               className="p-2 mt-4 rounded-md w-full  bg-blue-500 hover:bg-blue-600 text-white"
             >
               Start
             </button>
+            <div className="flex gap-4">
+              <Link
+                href={"/leaderboard/" + (user?.level || 1)}
+                target="_blank"
+                className="p-2 text-center mt-4 rounded-md w-full  bg-teal-500 hover:bg-teal-600 text-white"
+              >
+                Leaderboard
+              </Link>
+
+              <button
+                onClick={signOut}
+                className="p-2 mt-4 rounded-md w-full  bg-red-500 hover:bg-red-600 text-white"
+              >
+                Logout
+              </button>
+            </div>
           </div>
         </div>
       </Modal>
@@ -180,7 +203,10 @@ export const Game = ({ user = {} }) => {
             <div className="">Word to type</div>
             <div className="text-9xl">{textToWrite || "-"}</div>
           </div>
-          <div className="text-center mb-10">
+          <div className="text-center mb-10 relative">
+            {!!newPoints && (
+              <ScoreIncrement key={textToWrite} points={newPoints} />
+            )}
             <input
               onKeyUp={checkWord}
               type="text"
@@ -196,7 +222,17 @@ export const Game = ({ user = {} }) => {
           <hr className="bg-slate-100" />
           <div className="flex flex-col gap-4">
             {(leaderboard || []).map((usr, i) => {
-              let index = <>{i + 1}</>;
+              let index =
+                i < 3 ? (
+                  <Image
+                    width={40}
+                    height={40}
+                    src={"/assets/" + (i + 1) + ".png"}
+                    alt=""
+                  />
+                ) : (
+                  <>{i + 1}.</>
+                );
               return (
                 <div
                   className=" items-center gap-4 flex justify-between"

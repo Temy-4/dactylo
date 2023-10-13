@@ -18,3 +18,18 @@ body {
   font-family: "Plus Jakarta Sans";
   font-style: normal;
 }
+.score-increment {
+  position: absolute;
+  font-size: 1.5rem;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  animation: fadeUp 1s ease-out forwards;
+}
+@keyframes fadeUp {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100px);
+  }
+}
