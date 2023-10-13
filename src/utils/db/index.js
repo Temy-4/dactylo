@@ -20,7 +20,7 @@ if (!admin.apps.length) {
       databaseURL: "https://dactylo-5e25f-default-rtdb.firebaseio.com",
     });
   } catch (error) {
-    log("Firebase admin initialization error", error.stack);
+    console.log("Firebase admin initialization error", error.stack);
   }
 }
 export { admin };

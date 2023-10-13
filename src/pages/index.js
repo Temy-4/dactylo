@@ -19,7 +19,8 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <meta property="og:title" content="Dactylo" />
+        <title>Dactylo — {"Let's test your speed"}</title>
+        <meta property="og:title" content="Dactylo — Let's test your speed" />
         <meta
           property="og:image"
           content="https://dactylo.djopa.fr/banner.png"
