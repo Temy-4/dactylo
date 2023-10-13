@@ -43,6 +43,8 @@ export default function useFirebaseAuth() {
   const signInWithEmailAndPassword = (email, password) =>
     firebase.auth().signInWithEmailAndPassword(email, password);
 
+  const signInAnonymously = () => firebase.auth().signInAnonymously();
+
   const createUserWithEmailAndPassword = (email, password) =>
     firebase.auth().createUserWithEmailAndPassword(email, password);
 
@@ -63,5 +65,6 @@ export default function useFirebaseAuth() {
     createUserWithEmailAndPassword,
     signOut,
     signInWithGoogle,
+    signInAnonymously,
   };
 }

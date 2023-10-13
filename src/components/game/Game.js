@@ -64,7 +64,12 @@ export const Game = ({ user = {} }) => {
   const gameOver = useCallback(() => {
     setGameIsOver(true);
     inputTextRef.current.disabled = "disabled";
-    saveScore(dispatch, { score: points, uid: user.uid, level: user.level });
+    console.log({ user });
+    saveScore(dispatch, {
+      score: points,
+      lang: user.lang || "fr",
+      ...user,
+    });
   }, [points, dispatch, user]);
 
   const handleFocus = useCallback(() => {

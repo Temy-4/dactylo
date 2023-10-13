@@ -3,15 +3,16 @@ import Image from "next/image";
 import Modal from "./Modal";
 
 export const LoginModal = () => {
-  const { authUser, loading, signInWithGoogle } = useAuth();
+  const { authUser, loading, signInWithGoogle, signInAnonymously } = useAuth();
   return (
     <Modal dismissible={false} show={!authUser}>
       <div className="w-12/12 sm:w-8/12 md:w-6/12 lg:w-4/12 xl:w-3/12 bg-white rounded-lg shadow-lg p-5">
-        <h2 className="text-2xl font-light p-4 text-center ">Authentication</h2>
+        <h2 className="text-2xl font-semibold p-4 text-center ">
+          Authentication
+        </h2>
         <div className="p-4 flex justify-center items-center flex-col gap-8">
           <span className="text-sm">
             Hello 👋🏾 and welcome to Dactylo 😊.
-            <br />
             <br />
             Are you the fastest? Try to take the first place 😉.
           </span>
@@ -26,8 +27,14 @@ export const LoginModal = () => {
               loading="lazy"
               alt="google logo"
             />
-            <span>Login with Google</span>
+            <span>Continue with Google</span>
           </button>
+          {/* <button
+            onClick={signInAnonymously}
+            className="px-4 py-2 border flex gap-2 border-slate-200 rounded-lg text-slate-700 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
+          >
+            <span>🕶️ Continue anonymously</span>
+          </button> */}
         </div>
       </div>
     </Modal>

@@ -9,8 +9,6 @@ export const ScoreIncrement = ({ points }) => {
     }, 700);
     return () => clearTimeout(timer);
   }, []);
-  const left = Math.round(Math.random() * 800);
-  console.log({ left });
   return (
     <div
       className={`score-increment ${

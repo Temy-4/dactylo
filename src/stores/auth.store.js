@@ -4,6 +4,7 @@ import { createContext, useContext, Context } from "react";
 const AuthUserContext = createContext({
   authUser: null,
   loading: true,
+  signInAnonymously: async () => {},
   signInWithEmailAndPassword: async () => {},
   createUserWithEmailAndPassword: async () => {},
   signOut: async () => {},

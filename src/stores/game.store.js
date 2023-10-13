@@ -156,10 +156,9 @@ export async function getTopUsernamesAndScores(dispatch, level) {
   }
 }
 
-export async function saveScore(dispatch, { score, uid, level }) {
+export async function saveScore(dispatch, { score, uid, pseudo, level, lang }) {
   const scoresArray = await getAllScores(level);
   const previousScore = scoresArray.find((s) => s.uid === uid)?.score;
-  console.log({ previousScore, score });
   if (previousScore < score) {
     const scoresRef = firebaseApp
       .firestore()
@@ -169,8 +168,18 @@ export async function saveScore(dispatch, { score, uid, level }) {
     await scoresRef.update({
       [uid]: score,
     });
-    getUser(dispatch, uid);
   }
+  try {
+    await firebaseApp.firestore().collection("games").doc().set({
+      score,
+      uid,
+      pseudo,
+      level,
+      lang,
+      date: new Date(),
+    });
+  } catch (error) {}
+  getUser(dispatch, uid);
 }
 
 const GameStateContext = React.createContext();
