@@ -1,3 +1,4 @@
+import Spinner from "@/components/Spinner";
 import { getAllScores, getPseudo } from "@/stores/game.store";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,6 +12,7 @@ function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState([]);
   const loadLeaderboard = async (level) => {
     if (level) {
+      setLoading(true);
       const scoresArray = await getAllScores(level);
       const topUsers = scoresArray.sort((a, b) => b.score - a.score);
 
@@ -23,6 +25,7 @@ function Leaderboard() {
       );
       console.log(usersWithPseudos, level);
       setLeaderboard(usersWithPseudos);
+      setLoading(false);
     }
   };
 
@@ -37,34 +40,40 @@ function Leaderboard() {
           Dactylo Leaderboard 👑
         </Link>
         <div className="mt-10">
-          <div className="flex flex-col gap-4">
-            {(leaderboard || []).map((usr, i) => {
-              let index =
-                i < 3 ? (
-                  <Image
-                    width={40}
-                    height={40}
-                    src={"/assets/" + (i + 1) + ".png"}
-                    alt=""
-                  />
-                ) : (
-                  <>{i + 1}.</>
+          {loading ? (
+            <div className="flex justify-center">
+              <Spinner className={"fill-blue-800"} />
+            </div>
+          ) : (
+            <div className="flex flex-col gap-4">
+              {(leaderboard || []).map((usr, i) => {
+                let index =
+                  i < 3 ? (
+                    <Image
+                      width={40}
+                      height={40}
+                      src={"/assets/" + (i + 1) + ".png"}
+                      alt=""
+                    />
+                  ) : (
+                    <>{i + 1}.</>
+                  );
+                return (
+                  <div
+                    className=" items-center gap-4 flex justify-between"
+                    key={`ìtem_score_${i}`}
+                  >
+                    <div className="flex-grow-0 w-6 text-right text-lg font-bold">
+                      {index}
+                    </div>
+                    <div className=" py-3 border-slate-100 flex-grow text-left">
+                      {usr.pseudo} — {usr.score} pts
+                    </div>
+                  </div>
                 );
-              return (
-                <div
-                  className=" items-center gap-4 flex justify-between"
-                  key={`ìtem_score_${i}`}
-                >
-                  <div className="flex-grow-0 w-6 text-right text-lg font-bold">
-                    {index}
-                  </div>
-                  <div className=" py-3 border-slate-100 flex-grow text-left">
-                    {usr.pseudo} — {usr.score} pts
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+              })}
+            </div>
+          )}
         </div>
       </div>
     </div>

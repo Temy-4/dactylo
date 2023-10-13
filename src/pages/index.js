@@ -51,9 +51,24 @@ export default function Home() {
         <meta name="theme-color" content="#3F83F8" />
       </Head>
       <Feedback />
-      <LoginModal />
-      <CompleteProfileModal />
-      <Game user={user} />
+      <div className="hidden lg:block">
+        <LoginModal />
+        <CompleteProfileModal />
+        <Game user={user} />
+      </div>
+      <div className="flex justify-center h-screen w-screen items-center lg:hidden">
+        <div className=" bg-white w-8/12 p-10 shadow-lg">
+          Hello 👋🏾,
+          <br />
+          <br />
+          Welcome to Dactylo. It seems that you are on a small screen. To have a
+          better experience with us, we encourage you to use a larger screen. A
+          computer screen for example or you could zoom out to have more space.
+          <br />
+          <br />
+          Thank you,
+        </div>
+      </div>
     </div>
   );
 }
