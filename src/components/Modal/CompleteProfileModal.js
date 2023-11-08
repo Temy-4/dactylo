@@ -12,12 +12,12 @@ export const CompleteProfileModal = () => {
   const { authUser } = useAuth();
   const { loading, user } = useGameState();
   const dispatch = useGameDispatch();
-  const [pseudo, setPseudo] = useState();
+  const [pseudo, setPseudo] = useState(user?.displayedName?.trim() || "");
   const save = useCallback(() => {
     updateProfile(dispatch, {
       ...authUser,
       level: 1,
-      pseudo,
+      pseudo: pseudo.trim(),
     });
   }, [dispatch, authUser, pseudo]);
   return (
@@ -34,7 +34,7 @@ export const CompleteProfileModal = () => {
             <input
               onChange={(e) => setPseudo(e.target.value)}
               autoFocus
-              defaultValue={user?.pseudo || authUser?.displayedName}
+              defaultValue={pseudo}
               className="border-blue-400 w-full border-2 rounded-md p-2 text-center"
               placeholder="Enter a pseudo"
             />

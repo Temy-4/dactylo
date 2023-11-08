@@ -29,12 +29,12 @@ export const LoginModal = () => {
             />
             <span>Continue with Google</span>
           </button>
-          {/* <button
+          <button
             onClick={signInAnonymously}
             className="px-4 py-2 border flex gap-2 border-slate-200 rounded-lg text-slate-700 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
           >
             <span>🕶️ Continue anonymously</span>
-          </button> */}
+          </button>
         </div>
       </div>
     </Modal>
